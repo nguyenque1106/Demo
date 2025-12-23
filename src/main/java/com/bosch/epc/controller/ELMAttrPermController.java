@@ -79,13 +79,13 @@ public class ELMAttrPermController {
   @Autowired
   private ELMRoleService elmRoleService;
 
-  /**
-   * @return list of project areas
-   */
-  @GetMapping("/getall")
-  public Iterable<AttrPermCondition> getAll() {
-    return this.service.getAll();
-  }
+  // /**
+  //  * @return list of project areas
+  //  */
+  // @GetMapping("/getall")
+  // public Iterable<AttrPermCondition> getAll() {
+  //   return this.service.getAll();
+  // }
 
   /**
    * Getting Attribute has relationship to Request and ProjectArea
@@ -251,117 +251,117 @@ public class ELMAttrPermController {
         .filter(role -> filteredRoleIds.contains(role.getId())).map(ELMRole::getName).collect(Collectors.toList());
   }
 
-  /**
-   * Getting Attribute has relationship to Request and ProjectArea
-   *
-   * @param requestid       - request id
-   * @param projectAreaID   - project area id
-   * @param workitemTypeID  - work item Type ID
-   * @param stateGroup      - stateGroup
-   * @param stateId         - state Id
-   * @param resolutionId    - resolution Id
-   * @param filteredRoleIds - filtered RoleIds
-   * @return list of attribute conditions
-   */
-  @Operation(summary = "Getting Attribute has relationship to Request and ProjectArea")
-  @GetMapping("/request/{requestid}/filter")
-  public ResponseEntity<?> filterRequestData(
-      @PathVariable(name = "requestid", required = false) final Integer requestid,
-      @RequestParam(required = false) Integer projectAreaID, @RequestParam(required = false) String workitemTypeID,
-      @RequestParam(required = false) String stateGroup, @RequestParam(required = false) String stateId,
-      @RequestParam(required = false) String resolutionId,
-      @RequestParam(required = false) List<Integer> filteredRoleIds) {
-    try {
-      logger.info("Getting Attribute Permission Roles Conditions by requestId[{}], and projectId[{}]. {}", requestid,
-          projectAreaID, CommonConstant.MESS_START);
-      List<AttrPermCondition> attrPermConditions;
-      ITeamRepository repo = AlmServerConnection.getRepo();
+  // /**
+  //  * Getting Attribute has relationship to Request and ProjectArea
+  //  *
+  //  * @param requestid       - request id
+  //  * @param projectAreaID   - project area id
+  //  * @param workitemTypeID  - work item Type ID
+  //  * @param stateGroup      - stateGroup
+  //  * @param stateId         - state Id
+  //  * @param resolutionId    - resolution Id
+  //  * @param filteredRoleIds - filtered RoleIds
+  //  * @return list of attribute conditions
+  //  */
+  // @Operation(summary = "Getting Attribute has relationship to Request and ProjectArea")
+  // @GetMapping("/request/{requestid}/filter")
+  // public ResponseEntity<?> filterRequestData(
+  //     @PathVariable(name = "requestid", required = false) final Integer requestid,
+  //     @RequestParam(required = false) Integer projectAreaID, @RequestParam(required = false) String workitemTypeID,
+  //     @RequestParam(required = false) String stateGroup, @RequestParam(required = false) String stateId,
+  //     @RequestParam(required = false) String resolutionId,
+  //     @RequestParam(required = false) List<Integer> filteredRoleIds) {
+  //   try {
+  //     logger.info("Getting Attribute Permission Roles Conditions by requestId[{}], and projectId[{}]. {}", requestid,
+  //         projectAreaID, CommonConstant.MESS_START);
+  //     List<AttrPermCondition> attrPermConditions;
+  //     ITeamRepository repo = AlmServerConnection.getRepo();
 
-      // code for no changesets
-      ProjectArea selectedPA = this.paService.findById(projectAreaID).stream().findFirst()
-          .orElseThrow(() -> new RuntimeException("Project Area not found"));
+  //     // code for no changesets
+  //     ProjectArea selectedPA = this.paService.findById(projectAreaID).stream().findFirst()
+  //         .orElseThrow(() -> new RuntimeException("Project Area not found"));
 
 
-      IProjectArea projectArea = paService.getIProjectAreaByUUID(selectedPA.getUuid(), repo);
+  //     IProjectArea projectArea = paService.getIProjectAreaByUUID(selectedPA.getUuid(), repo);
 
-      String badReqMessage;
-      if (projectArea == null) {
-        badReqMessage = String.format("Cannot find projectarea with id: %d", projectAreaID);
-        logger.error(badReqMessage);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badReqMessage);
-      }
-      String stateGroupName = stateGroup != null ? Arrays.stream(StateGroupEnum.values())
-          .filter(e -> e.getId().equalsIgnoreCase(stateGroup)).map(StateGroupEnum::getName).findFirst().get() : null;
-      String workitemTypeName = ELMUtils.getWorkitemTypeName(workitemTypeID, repo, projectArea);
-      String stateName = ELMUtils.getStateNameById(workitemTypeID, stateId, repo, projectArea);
-      String resolutionName = stateName != null
-          ? ELMUtils.getResolutionNameById(workitemTypeID, stateId, resolutionId, repo, projectArea) : null;
-      List<String> elmRolesFiltered = getRoleNamesByIds(filteredRoleIds, selectedPA.getId());
-      Request request = getRequestById(requestid);
-      // in case there hasn't any existed request - getRequestById method can be optimised after api change.
-      if (request == null) {
-        logger.debug("There is no request with id:{}", requestid);
-        // find the specification path
-        String specificationFilePath = PropertyUtils.getPropValues(PropertyUtils.TEU_TOOL_PATH_SPEC)
-            .replace(PropertyUtils.PARAM_PROJECT_AREA_NAME, selectedPA.getName());
-        if (!new File(specificationFilePath).exists()) {
-          // Download the PA - need verify which template need to be downloaded
-          TEUUtility.downloadTemplate(selectedPA.getName());
-        }
-        if (!new File(specificationFilePath).exists()) {
-          badReqMessage = "There is no specification file to parse data. Re-check the downloading.";
-          logger.error(badReqMessage);
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badReqMessage);
-        }
+  //     String badReqMessage;
+  //     if (projectArea == null) {
+  //       badReqMessage = String.format("Cannot find projectarea with id: %d", projectAreaID);
+  //       logger.error(badReqMessage);
+  //       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badReqMessage);
+  //     }
+  //     String stateGroupName = stateGroup != null ? Arrays.stream(StateGroupEnum.values())
+  //         .filter(e -> e.getId().equalsIgnoreCase(stateGroup)).map(StateGroupEnum::getName).findFirst().get() : null;
+  //     String workitemTypeName = ELMUtils.getWorkitemTypeName(workitemTypeID, repo, projectArea);
+  //     String stateName = ELMUtils.getStateNameById(workitemTypeID, stateId, repo, projectArea);
+  //     String resolutionName = stateName != null
+  //         ? ELMUtils.getResolutionNameById(workitemTypeID, stateId, resolutionId, repo, projectArea) : null;
+  //     List<String> elmRolesFiltered = getRoleNamesByIds(filteredRoleIds, selectedPA.getId());
+  //     Request request = getRequestById(requestid);
+  //     // in case there hasn't any existed request - getRequestById method can be optimised after api change.
+  //     if (request == null) {
+  //       logger.debug("There is no request with id:{}", requestid);
+  //       // find the specification path
+  //       String specificationFilePath = PropertyUtils.getPropValues(PropertyUtils.TEU_TOOL_PATH_SPEC)
+  //           .replace(PropertyUtils.PARAM_PROJECT_AREA_NAME, selectedPA.getName());
+  //       if (!new File(specificationFilePath).exists()) {
+  //         // Download the PA - need verify which template need to be downloaded
+  //         TEUUtility.downloadTemplate(selectedPA.getName());
+  //       }
+  //       if (!new File(specificationFilePath).exists()) {
+  //         badReqMessage = "There is no specification file to parse data. Re-check the downloading.";
+  //         logger.error(badReqMessage);
+  //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badReqMessage);
+  //       }
 
-        // get attribute matrix data and also check for empty data
-        List<XMLCondition> xmlConditions = this.requestService.fetchPermissionsFromSpec(selectedPA.getName());
+  //       // get attribute matrix data and also check for empty data
+  //       List<XMLCondition> xmlConditions = this.requestService.fetchPermissionsFromSpec(selectedPA.getName());
 
-        logger.debug("XMLCondition list is empty?{}", xmlConditions.isEmpty());
-        if (xmlConditions.isEmpty()) {
+  //       logger.debug("XMLCondition list is empty?{}", xmlConditions.isEmpty());
+  //       if (xmlConditions.isEmpty()) {
 
-          // create fresh copy of conditions
-          attrPermConditions = this.attrPermService.createEmptyConditions(specificationFilePath, selectedPA);
-        }
-        else {
-          // convert XMLCondition to AttrPermCondition and return the data
-          attrPermConditions =
-              this.attrPermService.createAttrPermConditions(specificationFilePath, selectedPA, xmlConditions);
-        }
-      }
-      else {
-        logger.debug("Found out request and projectarea. Getting from database.");
-        // Has role-permission in DB ?
-        attrPermConditions = this.attrPermService.getListAttrPermCondFromDB(request, selectedPA);
-      }
+  //         // create fresh copy of conditions
+  //         attrPermConditions = this.attrPermService.createEmptyConditions(specificationFilePath, selectedPA);
+  //       }
+  //       else {
+  //         // convert XMLCondition to AttrPermCondition and return the data
+  //         attrPermConditions =
+  //             this.attrPermService.createAttrPermConditions(specificationFilePath, selectedPA, xmlConditions);
+  //       }
+  //     }
+  //     else {
+  //       logger.debug("Found out request and projectarea. Getting from database.");
+  //       // Has role-permission in DB ?
+  //       attrPermConditions = this.attrPermService.getListAttrPermCondFromDB(request, selectedPA);
+  //     }
 
-      // update the request data into the deails and disable the changes
-      return ResponseEntity.ok(filterAttrConditions(attrPermConditions, stateGroupName, workitemTypeName, stateName,
-          resolutionName, elmRolesFiltered));
+  //     // update the request data into the deails and disable the changes
+  //     return ResponseEntity.ok(filterAttrConditions(attrPermConditions, stateGroupName, workitemTypeName, stateName,
+  //         resolutionName, elmRolesFiltered));
 
-    }
-    catch (EpcException | IOException | TeamRepositoryException e) {
-      logger.error("Error:{}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
-    finally {
-      logger.info("Getting Attribute Permission Roles Conditions by requestId[{}], and projectId[{}]. {}", requestid,
-          projectAreaID, CommonConstant.MESS_END);
-    }
+  //   }
+  //   catch (EpcException | IOException | TeamRepositoryException e) {
+  //     logger.error("Error:{}", e.getMessage());
+  //     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+  //   }
+  //   finally {
+  //     logger.info("Getting Attribute Permission Roles Conditions by requestId[{}], and projectId[{}]. {}", requestid,
+  //         projectAreaID, CommonConstant.MESS_END);
+  //   }
 
-  }
+  // }
 
-  /**
-   * Method to get locked data of Attribute conditions
-   * 
-   * @return List of Attribute conditions
-   */
-  @Operation(summary = "Getting Attribute has relationship to Request and ProjectArea")
-  @GetMapping("/getlockinfo")
-  public ResponseEntity<?> getLockInfo() {
-    return ResponseEntity.ok(attrPermLockRepo.findAllOpenRequest());
+  // /**
+  //  * Method to get locked data of Attribute conditions
+  //  * 
+  //  * @return List of Attribute conditions
+  //  */
+  // @Operation(summary = "Getting Attribute has relationship to Request and ProjectArea")
+  // @GetMapping("/getlockinfo")
+  // public ResponseEntity<?> getLockInfo() {
+  //   return ResponseEntity.ok(attrPermLockRepo.findAllOpenRequest());
 
-  }
+  // }
 
 
   /**
