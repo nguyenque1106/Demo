@@ -1,0 +1,4 @@
+com\bosch\epc\unittest\PARoleRequestRepositoryTest.class
+com\bosch\epc\unittest\PARoleRequestServiceTest.class
+com\bosch\epc\unittest\TEUControllerTest.class
+com\bosch\epc\unittest\EhcacheTest.class

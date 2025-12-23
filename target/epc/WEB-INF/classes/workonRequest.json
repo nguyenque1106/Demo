@@ -1,0 +1,80 @@
+{
+   "summary":"model name",
+   "pkey":"RBGA",
+   "issuetype":"rbga.issuetype.default",
+   "applicant":"vfe1cob",
+   "priority":"default",
+   "data":{
+      "rbga.field.sourceSystem":"WorkON",  
+      "rbga.field.termCheck":"yes",
+      "rbga.field.description":"Description",
+      "rbga.field.comments":"Comments",
+      "rbga.field.externalLink": "https://www.bosch.com",
+     
+      "rbga.field.workflowType":"Serial",
+      "rbga.field.wf2":"Serial",
+      "rbga.field.wf3":"Serial",
+      "rbga.field.parallelWorkflowSel": "Only one Approver has to approve",
+      "rbga.field.parallelWorkflowSel2": "Only one Approver has to approve",
+      "rbga.field.parallelWorkflowSel3": "Only one Approver has to approve",
+      "rbga.field.approver1":{
+         "approvers":[
+            {
+               "addAfterEnabled":true,
+               "deleteFlag":"Yes",
+               "description":"",
+               "fixed":false,
+               "removable":true,
+               "userid":"vfe1cob",
+               "ccList":""          
+            },
+            {
+               "addAfterEnabled":true,
+               "deleteFlag":"Yes",
+               "description":"",
+               "fixed":false,
+               "removable":true,
+               "userid":"vfe1cob",
+               "ccList":""          
+            }        
+         ],
+         "checkDuplicate":"false",
+         "maxApprover":"20",
+         "type":"1"     
+       },
+"rbga.field.whenApproved":{
+ "approvers":[
+            {
+               "addAfterEnabled":true,
+               "deleteFlag":"Yes",
+               "description":"",
+               "fixed":false,
+               "removable":true,
+               "userid":"vfe1cob",
+               "ccList":""          
+            }  
+         ],
+         "checkDuplicate":"false",
+         "maxApprover":"20",
+         "type":"1"      
+ 
+},
+"rbga.field.whenDeclined":{
+ "approvers":[
+            {
+               "addAfterEnabled":true,
+               "deleteFlag":"Yes",
+               "description":"",
+               "fixed":false,
+               "removable":true,
+               "userid":"vfe1cob",
+               "ccList":""          
+            }  
+         ],
+         "checkDuplicate":"false",
+         "maxApprover":"20",
+         "type":"1"      
+ 
+}
+    }
+}
